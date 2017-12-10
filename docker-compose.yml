@@ -2,7 +2,7 @@ version: '2'
 
 services:
   apache:
-    image: 'truestealth/apache:lastest'
+    image: 'truestealth/apache:latest'
     labels:
       kompose.service.type: nodeport
     ports:
