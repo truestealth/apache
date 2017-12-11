@@ -9,6 +9,8 @@ LoadModule passenger_module /opt/bitnami/ruby/lib/ruby/gems/2.4.0/gems/passenger
   PassengerRoot /opt/bitnami/ruby/lib/ruby/gems/2.4.0/gems/passenger-5.1.12
   PassengerDefaultRuby /opt/bitnami/ruby/bin/ruby
 </IfModule>
+
+LoadModule perl_module /usr/lib/apache2/modules/mod_perl.so
 ```
 
 ## 2.
