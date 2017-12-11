@@ -7,24 +7,23 @@ RUN install_packages mc libcurl4-openssl-dev zlib1g-dev libssl-dev libapr1-dev l
 RUN bitnami-pkg unpack apache-2.4.29-0 --checksum 38af9f5ee6088655536238d9f70f4ce7fd6047e1c84fd5b02fa351efbc4f60c6
 RUN ln -sf /opt/bitnami/apache/htdocs /app
 
-RUN curl -sSL https://raw.githubusercontent.com/redmine/redmine/master/extra/svn/Redmine.pm > /usr/share/perl5/Apache/Redmine.pm
-
 # Ruby
 RUN wget -nc -P /tmp/bitnami/pkg/cache/ https://downloads.bitnami.com/files/stacksmith/ruby-2.4.2-0-linux-x64-debian-8.tar.gz && \
     echo "947456b3ef36072599c35e16777240eb25eb88c6d60216f538e396d7fc8fc5a5  /tmp/bitnami/pkg/cache/ruby-2.4.2-0-linux-x64-debian-8.tar.gz" | sha256sum -c - && \
     tar -zxf /tmp/bitnami/pkg/cache/ruby-2.4.2-0-linux-x64-debian-8.tar.gz -P --transform 's|^.*/files|/opt/bitnami|' --wildcards '*/files' && \
     rm -rf /tmp/bitnami/pkg/cache/ruby-2.4.2-0-linux-x64-debian-8.tar.gz
-RUN /opt/bitnami/ruby/bin/gem install bundler && /opt/bitnami/ruby/bin/gem install passenger --no-rdoc --no-ri
 
 #Grack
-RUN git clone https://github.com/schacon/grack.git /opt/bitnami/apache/htdocs/grack
-RUN mv /opt/bitnami/apache/htdocs/grack/config.ru /opt/bitnami/apache/htdocs/grack/config.ru_old
-COPY conf/config.ru /opt/bitnami/apache/htdocs/grack/config.ru
-RUN mkdir -p /opt/bitnami/apache/htdocs/grack/public
-RUN mkdir -p /opt/bitnami/apache/htdocs/grack/tmp
-RUN cd /opt/bitnami/apache/htdocs/grack/
-RUN /opt/bitnami/ruby/bin/bundle install --gemfile=/opt/bitnami/apache/htdocs/grack/Gemfile
+RUN curl -sSL https://raw.githubusercontent.com/redmine/redmine/master/extra/svn/Redmine.pm > /usr/share/perl5/Apache/Redmine.pm &&\
+    /opt/bitnami/ruby/bin/gem install bundler && /opt/bitnami/ruby/bin/gem install passenger --no-rdoc --no-ri && \
+    git clone https://github.com/schacon/grack.git /opt/bitnami/apache/htdocs/grack && \
+    mv /opt/bitnami/apache/htdocs/grack/config.ru /opt/bitnami/apache/htdocs/grack/config.ru_old && \
+    mkdir -p /opt/bitnami/apache/htdocs/grack/public && \
+    mkdir -p /opt/bitnami/apache/htdocs/grack/tmp && \
+    cd /opt/bitnami/apache/htdocs/grack/ && \
+    /opt/bitnami/ruby/bin/bundle install --gemfile=/opt/bitnami/apache/htdocs/grack/Gemfile 
 
+COPY conf/config.ru /opt/bitnami/apache/htdocs/grack/config.ru
 COPY rootfs /
 
 ENV APACHE_HTTPS_PORT_NUMBER="443" \
